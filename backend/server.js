@@ -7,7 +7,7 @@ const authRoutes=require("./routes/authRoutes");
 const morgan=require('morgan');
 // const dashboardRoutes=require("./routes/dashboardRoutes");
 // const expenseRoutes=require("./routes/expenseRoutes");
-// const incomeRoutes=require("./routes/userRoutes");
+const incomeRoutes=require("./routes/incomeRoutes");
 
 
 
@@ -31,6 +31,7 @@ app.use(morgan('dev'));
 connectDB();
 
 app.use("/api/v1/auth",authRoutes);
+app.use("/api/v1/income",incomeRoutes);
 
 //Serve Uploads Folder
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

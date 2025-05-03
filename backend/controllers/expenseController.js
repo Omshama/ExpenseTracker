@@ -69,28 +69,35 @@ exports.getAllExpense = async (req, res) => {
 
 // Delete the income
 exports.deleteExpense = async (req, res) => {
+  try {
     const userId = req.user.id;
-  
-    try {
-      const expense = await Expense.findById(req.params.id);
-  
-      if (!expense) {
-        return res.status(404).json({ message: "Income not found" });
-      }
-  
-      if (expense.userId.toString() !== userId) {
-        return res.status(403).json({ message: "Unauthorized" });
-      }
-  
-      await Expense.findByIdAndDelete(req.params.id);
-  
-      res.json({ message: "Income Deleted" });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Server Error" });
+    const expenseId = req.params.id;
+
+    console.log("🚀 Expense ID:", expenseId);
+    console.log("🧑 User ID from token:", userId);
+
+    const expense = await Expense.findById(expenseId);
+    console.log("📄 Expense Found:", expense);
+
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
     }
-  };
-  
+
+    console.log("🔍 Expense belongs to:", expense.userId.toString());
+
+    if (expense.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    await expense.deleteOne(); // or Expense.findByIdAndDelete(expenseId);
+    res.json({ message: "Expense Deleted Successfully" });
+  } catch (err) {
+    console.error("❌ Delete Error:", err.message);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
 
 
 // Download the excel of the income 

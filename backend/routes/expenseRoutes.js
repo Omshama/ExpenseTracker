@@ -10,7 +10,7 @@ const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Corrected route for adding expense
-router.post("/add", addExpense);
+router.post("/add",protect, addExpense);
 
 // Corrected route for getting all expenses
 router.get("/get", protect, getAllExpense);

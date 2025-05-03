@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Fixed import for Link
 import AuthLayout from '../../components/layouts/AuthLayout';
 import Input from '../../components/Inputs/Input'; // import your custom Input component
-import { validateEmail } from '../../utilis/helper';
+import { validateEmail ,validatePassword} from '../../utilis/helper';
+import axiosInstance from '../../utilis/axiosInstance';
+import { API_PATHS } from '../../utilis/apiPaths';
+import { UserContext } from '../../context/userContext';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
+  const {updateUser}=useContext(UserContext);
+  
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -22,6 +27,30 @@ const Login = () => {
     return;
   }
   //Login API Call
+  try {
+    const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN,{
+      email,
+      password,
+    });
+    const {token, user }=response.data;
+
+    if(token){
+      localStorage.setItem("token",token);
+      updateUser(user);
+      navigate("/dashboard");
+    }
+    
+
+  }
+  catch(error)
+  {
+    if(error.response &&  error.response.data.message){
+      setError(error.response.data.message); 
+    }
+    else{
+      setError("Something went wrong.Please Try Again")
+    }
+  }
 
   };
 

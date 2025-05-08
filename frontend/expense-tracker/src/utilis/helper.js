@@ -26,4 +26,13 @@ export const validateEmail = (email) => {
       ? `${formattedInteger}.${fractionalPart}`
       : formattedInteger;
   };
+
+  export const prepareExpensesBarChartData = (data = []) => {
+    const chartData = data.map((item) => ({
+      category: item?.category,
+      amount: item?.amount,
+    }));
+    return chartData;
+  };
+  
   

@@ -10,7 +10,8 @@ import InfoCard from '../../components/Cards/InfoCard';
 import RecentTransactions from '../../components/Dashboard/RecentTransactions';
 import FinanceOverview from './FinanceOverview';
 import { addThousandsSeprator } from '../../utilis/helper';
-
+import ExpenseTransactions from '../../components/Dashboard/ExpenseTransactions';
+import Last30DaysExpenses from './last30DaysExpenses';
 const Home = () => {
   useUserAuth();
   const navigate = useNavigate();
@@ -73,7 +74,17 @@ const Home = () => {
                 totalIncome={dashboardData.totalIncome || 0}
                 totalExpenses={dashboardData.totalExpenses || 0}
               />
-            </div>
+              <ExpenseTransactions
+                transactions={dashboardData?.last30DaysExpenses?.transactions || []}
+                onSeeMore={() => navigate("/expense")}
+                />
+             <Last30DaysExpenses
+              data={dashboardData?.last30DaysExpenses?.transactions || []}
+              />
+
+                </div>
+
+
           </>
         )}
       </div>
